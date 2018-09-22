@@ -37,27 +37,27 @@ public class LaserScannerUtil extends CordovaPlugin {
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         if (action != null) {
             if ("history".equals(action)) {
-			    // get scan result
+                // get scan result
                 callbackContext.success(codeCache.toString());
                 return true;
             } else if ("scan".equals(action)) {
-			    // exec scan
+                // exec scan
                 callbackContext.success(scanning);
-				execScan(callbackContext);
+                execScan(callbackContext);
                 return true;
             } else if ("listen".equals(action)) {
                 this.callbackContext = callbackContext;
-			    // open service
+                // open service
                 setListener(callbackContext);
                 return true;
             } else if ("close".equals(action)) {
-			    // close service
+                // close service
                 removeListener(callbackContext);
                 return true;
             }
         } else {
-			callbackContext.error("laser scanner error: you must present an action param to use the plugin.");
-		}
+            callbackContext.error("laser scanner error: you must present an action param to use the plugin.");
+        }
 
         return super.execute(action, args, callbackContext);
     }
@@ -96,20 +96,20 @@ public class LaserScannerUtil extends CordovaPlugin {
     /**
      * exec scan action
      */
-	private void execScan(CallbackContext callbackContext) {
-		Intent intent = new Intent("android.intent.action.FUNCTION_BUTTON_DOWN", null);
+    private void execScan(CallbackContext callbackContext) {
+        Intent intent = new Intent("android.intent.action.FUNCTION_BUTTON_DOWN", null);
         cordova.getActivity().sendBroadcast(intent);
-	}
+    }
 
     /**
      * scan result receiver
      */
-	private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver(){
-		@Override
-		public void onReceive(Context context, Intent intent){
-			String action = intent.getAction();
-			if (action.equals("com.android.scancontext")){
-				String str = intent.getStringExtra("Scan_context");
+    private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals("com.android.scancontext")) {
+                String str = intent.getStringExtra("Scan_context");
 
                 if (str != "" && str != null) {
                     // cache scan result
@@ -125,7 +125,7 @@ public class LaserScannerUtil extends CordovaPlugin {
 
                 pluginResult.setKeepCallback(true);
                 callbackContext.sendPluginResult(pluginResult);
-			}
-		}
-	};
+            }
+        }
+    };
 }
