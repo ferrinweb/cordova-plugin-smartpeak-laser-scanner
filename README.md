@@ -9,7 +9,7 @@ You can get information about the device from this page: [Rugged Android data co
 ## Usage
 ```
 // plugin install
-cordova plugin add https://github.com/ferrinweb/cordova-plugin-smartpeak-laser-scanner
+cordova plugin add https://github.com/ferrinweb/cordova-plugin-smartpeak-laser-scanner.git
 ```
 ```javascript
 // init plugin, when deviceReady event fired
