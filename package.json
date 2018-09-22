@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-smartpeak-laser-scanner",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "Cordova Laser Scanner Plugin",
   "cordova": {
     "id": "cordova-plugin-smartpeak-laser-scanner",
