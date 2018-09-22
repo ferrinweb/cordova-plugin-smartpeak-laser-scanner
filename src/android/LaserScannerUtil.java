@@ -1,4 +1,4 @@
-package cc.dfsoft;
+package com.ferrinweb;
 
 import android.content.Context;
 import android.content.Intent;
