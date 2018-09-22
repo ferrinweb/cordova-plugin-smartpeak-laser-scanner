@@ -1,0 +1,25 @@
+{
+  "name": "cordova-plugin-smartpeak-laser-scanner",
+  "version": "0.1",
+  "description": "Cordova Laser Scanner Plugin",
+  "cordova": {
+    "id": "cordova-plugin-smartpeak-laser-scanner",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "cordova",
+    "keyboard",
+    "smartpeak",
+    "laser-scanner",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "ferrinweb",
+  "license": "MIT license",
+  "bugs": {
+    "url": "https://github.com/ferrinweb/cordova-plugin-smartpeak-laser-scanner/issues"
+  },
+  "homepage": "https://github.com/ferrinweb"
+}
