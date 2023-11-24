@@ -12,6 +12,9 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.Date;
 import java.util.List;
 import java.util.List;
@@ -22,83 +25,53 @@ import java.util.HashMap;
 
 /**
  * Created by ferrinweb on 2018/9/22.
- * A Cordova Plugin: Get data from smartpeak PDA laser Scanner.
+ * A Cordova Plugin: Get data from seuic PDA laser Scanner.
  */
 
 public class LaserScannerUtil extends CordovaPlugin {
 
-    private CallbackContext callbackContext;
     private PluginResult pluginResult;
-    private List<Object> codeCache = new ArrayList<Object>();
-    private String scanning = "laser scanner scanning...";
-    private String closed = "laser scanner closed.";
+    private CallbackContext cc;
+
+    private JSONObject result = new JSONObject();
 
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
+        cc = callbackContext;
         if (action != null) {
-            if ("history".equals(action)) {
-                // get scan result
-                callbackContext.success(codeCache.toString());
-                return true;
-            } else if ("scan".equals(action)) {
-                // exec scan
-                callbackContext.success(scanning);
-                execScan(callbackContext);
-                return true;
-            } else if ("listen".equals(action)) {
-                this.callbackContext = callbackContext;
-                // open service
-                setListener(callbackContext);
-                return true;
-            } else if ("close".equals(action)) {
-                // close service
-                removeListener(callbackContext);
-                return true;
+            if ("init".equals(action)) {
+                try {
+                    setListener();
+                    result.put("message", "scanner is opened and start listening for scan result.");
+                    cc.sendPluginResult(prepareResult(result, PluginResult.Status.OK));
+                    return true;
+                } catch (Exception e) {
+                    result.put("error", e.getMessage());
+                    cc.error(result.toString());
+                }
             }
         } else {
-            callbackContext.error("laser scanner error: you must present an action param to use the plugin.");
+            result.put("error", "Use int method to use the plugin, please check your input");
+            cc.error(result.toString());
         }
 
-        return super.execute(action, args, callbackContext);
+        return super.execute(action, args, cc);
+    }
+
+    private PluginResult prepareResult (JSONObject map, PluginResult.Status type) {
+        pluginResult = new PluginResult(type, map.toString());
+        pluginResult.setKeepCallback(true);
+        return pluginResult;
     }
 
     /**
      * set mScanDataReceiver
      */
-    private void setListener(CallbackContext callbackContext) {
-        Intent scanIntent = new Intent("com.android.scanservice.scan.on");
+    private void setListener() {
         // register a receiver
         IntentFilter scanDataIntentFilter = new IntentFilter();
-        scanDataIntentFilter.addAction("com.android.scancontext");
+        scanDataIntentFilter.addAction("com.android.server.scannerservice.broadcast");
         cordova.getActivity().registerReceiver(mScanDataReceiver, scanDataIntentFilter);
-
-        cordova.getActivity().sendBroadcast(scanIntent);
-
-        pluginResult = new PluginResult(PluginResult.Status.OK, "scanner is opened and start listening for scan result.");
-        pluginResult.setKeepCallback(true);
-        callbackContext.sendPluginResult(pluginResult);
-    }
-
-    /**
-     * remove mScanDataReceiver
-     */
-    private void removeListener(CallbackContext callbackContext) {
-        cordova.getActivity().unregisterReceiver(mScanDataReceiver);
-
-        Intent scanIntent = new Intent("com.android.scanservice.scan.off");
-        cordova.getActivity().sendBroadcast(scanIntent);
-
-        codeCache.clear();
-
-        callbackContext.success(closed);
-    }
-
-    /**
-     * exec scan action
-     */
-    private void execScan(CallbackContext callbackContext) {
-        Intent intent = new Intent("android.intent.action.FUNCTION_BUTTON_DOWN", null);
-        cordova.getActivity().sendBroadcast(intent);
     }
 
     /**
@@ -108,23 +81,19 @@ public class LaserScannerUtil extends CordovaPlugin {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals("com.android.scancontext")) {
-                String str = intent.getStringExtra("Scan_context");
+            if (action.equals("com.android.server.scannerservice.broadcast")) {
+                String str = intent.getStringExtra("scannerdata");
 
+                result.remove("message");
+                result.remove("error");
                 if (str != "" && str != null) {
-                    // cache scan result
-                    Map codeData = new HashMap();
-                    codeData.put("timestamp", new Date().getTime());
-                    codeData.put("code", str);
-                    codeCache.add(codeData);
-
-                    pluginResult = new PluginResult(PluginResult.Status.OK, str);
+                    result.put("text", str);
+                    pluginResult = prepareResult(result, PluginResult.Status.OK);
                 } else {
-                    pluginResult = new PluginResult(PluginResult.Status.ERROR, "scan result is empty.");
+                    result.put("error", "scan result is empty.");
+                    pluginResult = prepareResult(result, PluginResult.Status.ERROR);
                 }
-
-                pluginResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(pluginResult);
+                cc.sendPluginResult(pluginResult);
             }
         }
     };

@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-smartpeak-laser-scanner",
+  "name": "cordova-plugin-seuic-laser-scanner",
   "version": "0.0.1",
   "description": "Cordova Laser Scanner Plugin",
   "cordova": {
-    "id": "cordova-plugin-smartpeak-laser-scanner",
+    "id": "cordova-plugin-seuic-laser-scanner",
     "platforms": [
       "android"
     ]
@@ -11,7 +11,7 @@
   "keywords": [
     "cordova",
     "keyboard",
-    "smartpeak",
+    "seuic",
     "laser-scanner",
     "ecosystem:cordova",
     "cordova-android"
@@ -23,7 +23,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ferrinweb/cordova-plugin-smartpeak-laser-scanner.git"
+    "url": "git+https://github.com/ferrinweb/cordova-plugin-smartpeak-laser-scanner.git",
+    "branch": "seuic"
   },
   "homepage": "https://github.com/ferrinweb"
 }

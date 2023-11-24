@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<plugin id="cordova-plugin-smartpeak-laser-scanner" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-seuic-laser-scanner" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>smartpeakLaserScannerPlugin</name>
     <description>Cordova Laser Scanner Plugin</description>
     <license>MIT license</license>
-    <keywords>cordova,smartpeak,keyboard,laserScanner</keywords>
+    <keywords>cordova,seuic,keyboard,laserScanner</keywords>
 
     <js-module name="laserScanner" src="www/laser-scanner.js">
         <clobbers target="LaserScannerUtil" />
@@ -15,6 +15,9 @@
                 <param name="android-package" value="com.ferrinweb.LaserScannerUtil" />
             </feature>
         </config-file>
+        
+        <framework src="com.alibaba:fastjson:1.1.67.android"/>
+
         <source-file src="src/android/LaserScannerUtil.java" target-dir="src/com/ferrinweb" />
     </platform>
 </plugin>
