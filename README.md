@@ -17,31 +17,16 @@ cordova plugin add cordova-plugin-seuic-laser-scanner
 
 ```javascript
 // init plugin, when deviceReady event fired
-LaserScannerUtil.listen(data => {
-  console.info('scan listening...', data)
-}, error => {
-  console.info('init or scan error: ', error)
-})
-
-// close scanner
-LaserScannerUtil.close(() => {
-  console.info('scanner closed.')
-}, error => {
-  console.info('scanner error: ', error)
-})
-
-// exec a laser scan by function
-LaserScannerUtil.scan(data => {
-  console.info('scan result: ', data)
-}, error => {
-  console.info('scan error: ', error)
-})
-
-// get laser scanner result history
-LaserScannerUtil.history(results => {
-  console.info('scan history: ', results)
-}, error => {
-  console.info('scan error: ', error)
+LaserScannerUtil.init(result => {
+  result = JSON.parse(result)
+  if (result.text) {
+    return console.log(result.text.trim())
+  }
+  if (result.message) {
+    console.log(result.message)
+  }
+}, e => {
+  console.error(e)
 })
 ```
 
